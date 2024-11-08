@@ -11,7 +11,7 @@ def post_detail(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
 
-# New view for adding posts
+# View for adding posts
 def add_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -24,7 +24,7 @@ def add_post(request):
         form = PostForm()
     return render(request, 'blog/add_post.html', {'form': form})
 
-# New view for editing posts
+# View for editing posts
 def edit_post(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)
     if request.method == 'POST':
@@ -35,3 +35,11 @@ def edit_post(request, post_id):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/edit_post.html', {'form': form, 'post': post})
+
+# New view for deleting posts
+def delete_post(request, post_id):
+    post = get_object_or_404(BlogPost, id=post_id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('post_list')
+    return render(request, 'blog/delete_post.html', {'post': post})
