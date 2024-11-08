@@ -1,0 +1,14 @@
+<!-- blog/templates/blog/post_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>by {{ post.author }} on {{ post.created_date }}</p>
+    <p>{{ post.content }}</p>  <!-- Display full post content -->
+    <a href="{% url 'post_list' %}">Back to Home</a>
+</body>
+</html>
