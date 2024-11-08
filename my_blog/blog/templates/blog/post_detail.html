@@ -6,18 +6,32 @@
     <title>{{ post.title }}</title>
 </head>
 <body>
-    {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }}!</p>
-        <a href="{% url 'logout' %}">Logout</a> |
-        <a href="{% url 'edit_post' post.id %}">Edit Post</a> |
-        <a href="{% url 'delete_post' post.id %}">Delete Post</a>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
-    {% endif %}
-
     <h1>{{ post.title }}</h1>
     <p>by {{ post.author }} on {{ post.created_date }}</p>
-    <p>{{ post.content }}</p>  <!-- Display full post content -->
+    <p>{{ post.content }}</p>
     <a href="{% url 'post_list' %}">Back to Home</a>
+
+    <!-- Comments Section -->
+    <h2>Comments</h2>
+    <div>
+        {% for comment in comments %}
+            <p><strong>{{ comment.author }}</strong> on {{ comment.created_date }}</p>
+            <p>{{ comment.content }}</p>
+        {% empty %}
+            <p>No comments yet. Be the first to comment!</p>
+        {% endfor %}
+    </div>
+
+    <!-- Comment Form -->
+    {% if user.is_authenticated %}
+        <h3>Leave a Comment</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Add Comment</button>
+        </form>
+    {% else %}
+        <p>You must be logged in to comment. <a href="{% url 'login' %}">Login here</a>.</p>
+    {% endif %}
 </body>
 </html>
