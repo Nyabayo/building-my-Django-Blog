@@ -1,26 +1,33 @@
 <!-- blog/templates/blog/post_list.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Blog Posts</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }}!</p>
-        <a href="{% url 'logout' %}">Logout</a> |
-        <a href="{% url 'add_post' %}">Add New Post</a>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
-    {% endif %}
+    <div class="navbar">
+        {% if user.is_authenticated %}
+            <p>Welcome, {{ user.username }}!</p>
+            <a href="{% url 'logout' %}">Logout</a> |
+            <a href="{% url 'add_post' %}">Add New Post</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
 
     <h1>Blog Posts</h1>
-    <ul>
+    <div class="post-list">
         {% for post in posts %}
-            <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> by {{ post.author }}</li>
+            <div class="post-item">
+                <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
+                <p><em>by {{ post.author }} on {{ post.created_date }}</em></p>
+            </div>
         {% empty %}
             <p>No posts available.</p>
         {% endfor %}
-    </ul>
+    </div>
 </body>
 </html>

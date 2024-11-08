@@ -1,22 +1,28 @@
 <!-- blog/templates/blog/post_detail.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h1>{{ post.title }}</h1>
-    <p>by {{ post.author }} on {{ post.created_date }}</p>
-    <p>{{ post.content }}</p>
-    <a href="{% url 'post_list' %}">Back to Home</a>
+    <div class="post-detail">
+        <h1>{{ post.title }}</h1>
+        <p><em>by {{ post.author }} on {{ post.created_date }}</em></p>
+        <p>{{ post.content }}</p>
+        <a class="button" href="{% url 'post_list' %}">Back to Home</a>
+    </div>
 
     <!-- Comments Section -->
-    <h2>Comments</h2>
-    <div>
+    <div class="comments-section">
+        <h2>Comments</h2>
         {% for comment in comments %}
-            <p><strong>{{ comment.author }}</strong> on {{ comment.created_date }}</p>
-            <p>{{ comment.content }}</p>
+            <div class="comment">
+                <p><strong>{{ comment.author }}</strong> on {{ comment.created_date }}</p>
+                <p>{{ comment.content }}</p>
+            </div>
         {% empty %}
             <p>No comments yet. Be the first to comment!</p>
         {% endfor %}
@@ -24,12 +30,14 @@
 
     <!-- Comment Form -->
     {% if user.is_authenticated %}
-        <h3>Leave a Comment</h3>
-        <form method="post">
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit">Add Comment</button>
-        </form>
+        <div class="comment-form">
+            <h3>Leave a Comment</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit">Add Comment</button>
+            </form>
+        </div>
     {% else %}
         <p>You must be logged in to comment. <a href="{% url 'login' %}">Login here</a>.</p>
     {% endif %}
