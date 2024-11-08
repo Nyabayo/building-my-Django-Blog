@@ -1,4 +1,5 @@
 # blog/views.py
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import BlogPost
 from .forms import PostForm
@@ -11,7 +12,7 @@ def post_detail(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
 
-# View for adding posts
+@login_required  # Only logged-in users can add posts
 def add_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -24,7 +25,7 @@ def add_post(request):
         form = PostForm()
     return render(request, 'blog/add_post.html', {'form': form})
 
-# View for editing posts
+@login_required  # Only logged-in users can edit posts
 def edit_post(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)
     if request.method == 'POST':
@@ -36,7 +37,7 @@ def edit_post(request, post_id):
         form = PostForm(instance=post)
     return render(request, 'blog/edit_post.html', {'form': form, 'post': post})
 
-# New view for deleting posts
+@login_required  # Only logged-in users can delete posts
 def delete_post(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)
     if request.method == 'POST':

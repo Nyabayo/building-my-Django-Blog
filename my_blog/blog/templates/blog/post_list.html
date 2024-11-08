@@ -3,21 +3,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Blog</title>
+    <title>Blog Posts</title>
 </head>
 <body>
-    <h1>My Blog</h1>
-    <div>
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+        <a href="{% url 'logout' %}">Logout</a> |
+        <a href="{% url 'add_post' %}">Add New Post</a>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+
+    <h1>Blog Posts</h1>
+    <ul>
         {% for post in posts %}
-            <div>
-                <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>  <!-- Link to detailed post page -->
-                <p>by {{ post.author }} on {{ post.created_date }}</p>
-                <p>{{ post.content|truncatewords:30 }}</p>
-            </div>
-            <hr>
+            <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> by {{ post.author }}</li>
         {% empty %}
             <p>No posts available.</p>
         {% endfor %}
-    </div>
+    </ul>
 </body>
 </html>
